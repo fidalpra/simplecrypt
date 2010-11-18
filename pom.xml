@@ -3,17 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>net.sourceforge.myjorganizer</groupId>
-	<artifactId>MyJOrganizer</artifactId>
+	<groupId>com.davidebellettini.crypt</groupId>
+	<artifactId>SimpleCrypt</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
 	<name>MyJOrganizer</name>
-	<description>Simple Swing-Base Personal Information Management</description>
-	<url>http://myjorganizer.sourceforge.net/</url>
+	<description>Simple Swing-Based Cipher Application</description>
+	<url>http://www.davidebellettini.com/</url>
 	<packaging>pom</packaging>
-	<issueManagement>
-		<system>Trac</system>
-		<url>http://sourceforge.net/apps/trac/myjorganizer/</url>
-	</issueManagement>
 	<inceptionYear>2010</inceptionYear>
 	<licenses>
 		<license>
