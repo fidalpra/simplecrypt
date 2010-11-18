@@ -5,26 +5,41 @@
 
 package com.davidebellettini.crypt.gui;
 
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
+
 import org.jdesktop.application.FrameView;
 
 /**
- *
+ * 
  * @author davide
  */
 public class MainView extends FrameView {
 
-    private MainFrame mainFrame;
+	private JMenuBar menuBar;
+	private MainPanel panel;
+	private JMenuItem fileMenu;
 
-    public MainView(SimpleCryptApp application) {
-        super(application);
+	public MainView(SimpleCryptApp application) {
+		super(application);
 
-        initComponents();
-    }
+		initComponents();
+	}
 
-    private void initComponents() {
-        this.mainFrame = new MainFrame();
+	private void initComponents() {
+		this.panel = new MainPanel();
 
-        setFrame(mainFrame);
-    }
+		getFrame().setContentPane(this.panel);
+
+		initMenuBar();
+	}
+
+	private void initMenuBar() {
+		this.menuBar = new JMenuBar();
+		this.fileMenu = new JMenu("File");
+		this.menuBar.add(this.fileMenu);
+		
+		setMenuBar(this.menuBar);
+	}
 }
