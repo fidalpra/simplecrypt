@@ -19,7 +19,7 @@
 	</licenses>
 
 	<modules>
-		<module>core</module>
+		<module>simplecrypt-core</module>
 	</modules>
 
 	<build>
