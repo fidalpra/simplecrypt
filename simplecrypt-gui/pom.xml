@@ -9,9 +9,9 @@
 		<version>0.1.1-SNAPSHOT</version>
 	</parent>
 	<groupId>com.davidebellettini</groupId>
-	<artifactId>simplecrypt-core</artifactId>
+	<artifactId>simplecrypt-gui</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
-	<name>SimpleCrypt Core</name>
+	<name>SimpleCrypt GUI</name>
 	<url>http://maven.apache.org</url>
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
