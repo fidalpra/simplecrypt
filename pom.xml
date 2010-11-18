@@ -3,10 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
 	<modelVersion>4.0.0</modelVersion>
-	<groupId>com.davidebellettini.crypt</groupId>
-	<artifactId>SimpleCrypt</artifactId>
+	<groupId>com.davidebellettini</groupId>
+	<artifactId>simplecrypt</artifactId>
 	<version>0.1.1-SNAPSHOT</version>
-	<name>MyJOrganizer</name>
+	<name>SimpleCrypt</name>
 	<description>Simple Swing-Based Cipher Application</description>
 	<url>http://www.davidebellettini.com/</url>
 	<packaging>pom</packaging>
@@ -20,7 +20,6 @@
 
 	<modules>
 		<module>core</module>
-		<module>gui</module>
 	</modules>
 
 	<build>
