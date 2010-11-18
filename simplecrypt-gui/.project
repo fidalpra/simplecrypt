@@ -3,6 +3,8 @@
 	<name>simplecrypt-core</name>
 	<comment></comment>
 	<projects>
+		<project>simplecrypt</project>
+		<project>simplecrypt-core</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
