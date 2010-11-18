@@ -144,9 +144,9 @@
 	</reporting>
 
 	<scm>
-		<connection>scm:svn:http://myjorganizer.svn.sourceforge.net/svnroot/myjorganizer/trunk/</connection>
-		<developerConnection>scm:svn:https://myjorganizer.svn.sourceforge.net/svnroot/myjorganizer/trunk/</developerConnection>
-		<url>http://myjorganizer.svn.sourceforge.net/svnroot/myjorganizer/trunk/</url>
+		<connection>scm:svn:http://dbellettini.unfuddle.com/svn/dbellettini_crypt/trunk</connection>
+		<developerConnection>scm:svn:http://dbellettini.unfuddle.com/svn/dbellettini_crypt/trunk</developerConnection>
+		<url>http://dbellettini.unfuddle.com/svn/dbellettini_crypt/trunk</url>
 	</scm>
 	<developers>
 		<developer>
