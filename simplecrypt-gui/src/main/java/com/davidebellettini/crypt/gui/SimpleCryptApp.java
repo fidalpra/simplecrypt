@@ -11,9 +11,13 @@ public class SimpleCryptApp extends SingleFrameApplication {
 		launch(SimpleCryptApp.class, args);
 	}
 
+	private MainView mainView;
+
 	@Override
 	protected void startup() {
-		// TODO Auto-generated method stub
+		this.mainView = new MainView(this);
+		
+		show(this.mainView);
 	}
 
 }
