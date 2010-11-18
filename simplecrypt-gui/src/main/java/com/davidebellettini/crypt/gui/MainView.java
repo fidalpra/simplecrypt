@@ -20,6 +20,7 @@ public class MainView extends FrameView {
 	private JMenuBar menuBar;
 	private MainPanel panel;
 	private JMenuItem fileMenu;
+	private JMenuItem fileExitMenuItem;
 
 	public MainView(SimpleCryptApp application) {
 		super(application);
@@ -36,8 +37,11 @@ public class MainView extends FrameView {
 	}
 
 	private void initMenuBar() {
-		this.menuBar = new JMenuBar();
-		this.fileMenu = new JMenu("File");
+		menuBar = new JMenuBar();
+		fileMenu = new JMenu("File");
+		fileExitMenuItem = new JMenuItem("Esci");
+		fileMenu.add(fileExitMenuItem);
+		
 		this.menuBar.add(this.fileMenu);
 		
 		setMenuBar(this.menuBar);
