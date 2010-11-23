@@ -9,6 +9,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 
+import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.FrameView;
 
 /**
@@ -22,9 +23,12 @@ public class MainView extends FrameView {
 	private JMenuItem fileMenu;
 	private JMenuItem fileExitMenuItem;
 	private JMenu algorithmMenu;
+	private ApplicationActionMap actionMap;
 
-	public MainView(SimpleCryptApp application) {
+	public MainView(SimpleCryptApp application, ApplicationActionMap actionMap) {
 		super(application);
+		
+		this.actionMap = actionMap;
 
 		initComponents();
 	}
@@ -41,8 +45,11 @@ public class MainView extends FrameView {
 		menuBar = new JMenuBar();
 
 		fileMenu = new JMenu("File");
-		fileExitMenuItem = new JMenuItem("Esci");
+		fileExitMenuItem = new JMenuItem();
+		fileExitMenuItem.setAction(actionMap.get("exit"));
+		fileExitMenuItem.setText("Esci");
 		fileMenu.add(fileExitMenuItem);
+		
 		this.menuBar.add(this.fileMenu);
 		
 		algorithmMenu = new JMenu("Algoritmo");

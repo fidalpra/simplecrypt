@@ -7,6 +7,8 @@ public class MainController {
 
 	public MainController(SimpleCryptApp application) {
 		this.application = application;
+		application.show(new MainView(application, application.getContext()
+				.getActionMap(this)));
 	}
 
 	public SimpleCryptApp getApplication() {

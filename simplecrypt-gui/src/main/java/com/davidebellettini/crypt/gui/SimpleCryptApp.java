@@ -35,13 +35,9 @@ public class SimpleCryptApp extends SingleFrameApplication {
 
 	}
 
-	private MainView mainView;
-
 	@Override
 	protected void startup() {
-		this.mainView = new MainView(this);
-
-		show(this.mainView);
+		new MainController(this);
 	}
 
 }
