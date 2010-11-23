@@ -10,7 +10,7 @@ import org.bouncycastle.jce.provider.BouncyCastleProvider;
  * @author Davide Bellettini <davide.bellettini@studio.unibo.it>
  *
  */
-public class Initializer {
+public class ProviderInitializer {
 
 	public static void loadProvider() {
 		Security.addProvider(new BouncyCastleProvider());
