@@ -28,14 +28,6 @@
 		<finalName>${project.artifactId}</finalName>
 		<directory>target</directory>
 		<outputDirectory>target/classes</outputDirectory>
-		<sourceDirectory>src/main/java</sourceDirectory>
-		<testSourceDirectory>src/test/java</testSourceDirectory>
-
-		<resources>
-			<resource>
-				<directory>src/main/resources</directory>
-			</resource>
-		</resources>
 
 		<plugins>
 			<plugin>
@@ -174,6 +166,12 @@
 			<name>MVNRepository</name>
 			<layout>default</layout>
 			<url>http://mvnrepository.com/</url>
+		</repository>
+		<repository>
+			<id>ala.org</id>
+			<name>ala.org</name>
+			<layout>default</layout>
+			<url>http://maven.ala.org.au/repository/</url>
 		</repository>
 	</repositories>
 
