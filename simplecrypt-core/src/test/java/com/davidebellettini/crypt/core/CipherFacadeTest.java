@@ -36,8 +36,6 @@ public class CipherFacadeTest {
 		File decryptedFile = new File("target/decripted.txt");
 		facade.decryptFile(encryptedFile, decryptedFile);
 
-		assertEquals(originalFile.length(), decryptedFile.length());
-
 		byte[] original = new byte[(int) originalFile.length()];
 		byte[] decrypted = new byte[(int) decryptedFile.length()];
 
