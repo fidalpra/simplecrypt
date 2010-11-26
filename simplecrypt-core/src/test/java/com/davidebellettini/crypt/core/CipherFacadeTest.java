@@ -1,8 +1,10 @@
 package com.davidebellettini.crypt.core;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertEquals;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.security.SecureRandom;
 
@@ -22,15 +24,32 @@ public class CipherFacadeTest {
 
 		File keyringFile = new File("target/keyring.test");
 		keyringFile.delete();
-		
+
 		CipherFacade facade = CipherFacade.factory(keyringFile,
 				"99BottlesOfBeer".toCharArray(), salt);
 
 		File encryptedFile = new File("target/example.sc");
-		facade.encryptFile(new File("example.txt"),
-				encryptedFile, "AES");
-		
-		facade.decryptFile(new File("target/example.sc"), new File("target/decripted.txt"));
+		File originalFile = new File("example.txt");
+
+		facade.encryptFile(originalFile, encryptedFile, "AES");
+
+		File decryptedFile = new File("target/decripted.txt");
+		facade.decryptFile(encryptedFile, decryptedFile);
+
+		assertEquals(originalFile.length(), decryptedFile.length());
+
+		byte[] original = new byte[(int) originalFile.length()];
+		byte[] decrypted = new byte[(int) decryptedFile.length()];
+
+		FileInputStream fis = new FileInputStream(originalFile);
+		fis.read(original);
+		fis.close();
+
+		fis = new FileInputStream(decryptedFile);
+		fis.read(decrypted);
+		fis.close();
+
+		assertArrayEquals(original, decrypted);
 	}
 
 }
