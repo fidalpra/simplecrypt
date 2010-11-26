@@ -8,6 +8,7 @@ package com.davidebellettini.crypt.gui;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JSeparator;
 
 import org.jdesktop.application.ApplicationActionMap;
 import org.jdesktop.application.FrameView;
@@ -22,12 +23,13 @@ public class MainView extends FrameView {
 	private MainPanel panel;
 	private JMenuItem fileMenu;
 	private JMenuItem fileExitMenuItem;
-	private JMenu algorithmMenu;
 	private ApplicationActionMap actionMap;
+	private JMenuItem fileCryptMenuItem;
+	private JMenuItem fileDecryptMenuItem;
 
 	public MainView(SimpleCryptApp application, ApplicationActionMap actionMap) {
 		super(application);
-		
+
 		this.actionMap = actionMap;
 
 		initComponents();
@@ -45,16 +47,29 @@ public class MainView extends FrameView {
 		menuBar = new JMenuBar();
 
 		fileMenu = new JMenu("File");
+		
+		fileCryptMenuItem = new JMenuItem();
+		fileCryptMenuItem.setAction(actionMap.get("crypt"));
+		fileCryptMenuItem.setText("Cifra...");
+		
+		fileMenu.add(fileCryptMenuItem);
+		
+		fileDecryptMenuItem = new JMenuItem();
+		fileDecryptMenuItem.setAction(actionMap.get("decrypt"));
+		fileDecryptMenuItem.setText("Decifra...");
+		
+		fileMenu.add(fileDecryptMenuItem);
+		
+		fileMenu.add(new JSeparator());
+
 		fileExitMenuItem = new JMenuItem();
 		fileExitMenuItem.setAction(actionMap.get("exit"));
 		fileExitMenuItem.setText("Esci");
+
 		fileMenu.add(fileExitMenuItem);
-		
+
 		this.menuBar.add(this.fileMenu);
-		
-		algorithmMenu = new JMenu("Algoritmo");
-		this.menuBar.add(algorithmMenu);
-		
+
 		setMenuBar(this.menuBar);
 	}
 }
