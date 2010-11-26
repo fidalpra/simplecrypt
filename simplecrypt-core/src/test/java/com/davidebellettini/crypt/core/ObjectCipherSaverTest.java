@@ -3,7 +3,7 @@ package com.davidebellettini.crypt.core;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.Serializable;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -11,6 +11,7 @@ import java.security.SecureRandom;
 
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
+import javax.crypto.SealedObject;
 import javax.crypto.spec.SecretKeySpec;
 
 import org.junit.BeforeClass;
@@ -24,19 +25,19 @@ public class ObjectCipherSaverTest {
 	}
 
 	@Test
-	public void testObjectSaver() throws NoSuchAlgorithmException,
-			NoSuchProviderException, NoSuchPaddingException, IOException,
-			InvalidKeyException, ClassNotFoundException {
+	public void testObjectSaver() throws Exception {
 		String data = "Goofy";
 		File file = new File("target/object.test");
 		SecretKeySpec key = getRandomKey();
 		Cipher encCipher = getCipher(key, Cipher.ENCRYPT_MODE);
 
-		ObjectCipherSaver.save(data, file, encCipher);
+		ObjectCipherSaver.save(data, file, "DonaldDuck", encCipher);
 		
 		Cipher decCipher = getCipher(key, Cipher.DECRYPT_MODE);
 		
-		assertEquals(data, ObjectCipherSaver.load(file, decCipher));
+		Serializable[] loadedData = ObjectCipherSaver.load(file);
+		assertEquals("DonaldDuck", loadedData[0]);
+		assertEquals(data, ((SealedObject)loadedData[1]).getObject(decCipher));
 	}
 
 	private SecretKeySpec getRandomKey() throws NoSuchAlgorithmException {
