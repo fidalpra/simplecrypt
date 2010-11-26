@@ -13,17 +13,17 @@ public class Keyring implements Serializable {
 	 */
 	private static final long serialVersionUID = -3633358150630280931L;
 
-	private HashMap<String, EquatableSecretKey> cipherKeys = new HashMap<String, EquatableSecretKey>();
+	private HashMap<Serializable, EquatableSecretKey> cipherKeys = new HashMap<Serializable, EquatableSecretKey>();
 
-	public void put(String keyId, EquatableSecretKey key) {
+	public void put(Serializable keyId, EquatableSecretKey key) {
 		cipherKeys.put(keyId, key);
 	}
 
-	public EquatableSecretKey get(String key) {
+	public EquatableSecretKey get(Serializable key) {
 		return cipherKeys.get(key);
 	}
 
-	public EquatableSecretKey remove(String key) {
+	public EquatableSecretKey remove(Serializable key) {
 		return cipherKeys.remove(key);
 	}
 
