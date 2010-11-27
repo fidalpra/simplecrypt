@@ -1,6 +1,7 @@
 package com.davidebellettini.crypt.core;
 
 import static org.junit.Assert.assertArrayEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -22,6 +23,8 @@ public class CipherFacadeTest {
 
 		CipherFacade facade = CipherFacade.factory(keyringFile,
 				"99BottlesOfBeer".toCharArray());
+		
+		assertTrue(facade.isNewFile());
 
 		File encryptedFile = new File("target/example.sc");
 		File originalFile = new File("example.txt");

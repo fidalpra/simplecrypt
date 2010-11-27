@@ -19,7 +19,6 @@ public class CipherFacade {
 
     private final File keyringFile;
     private final char[] passphrase;
-
     public CipherFacade(File keyringFile, char[] passPhrase) {
         this.keyringFile = keyringFile;
         this.passphrase = passPhrase;
@@ -47,12 +46,12 @@ public class CipherFacade {
         byte[] rawKey = new byte[256 / 8];
         random.nextBytes(rawKey);
 
-        SecretKeySpec key = new SecretKeySpec(rawKey, "AES");
+        SecretKeySpec key = new SecretKeySpec(rawKey, algorithm);
 
         Cipher cipher = null;
 
         try {
-            cipher = getCipher(key, Cipher.ENCRYPT_MODE);
+            cipher = getCipher(key, Cipher.ENCRYPT_MODE, algorithm);
         } catch (InvalidKeyException e) {
             throw new RuntimeException(e);
         }
@@ -90,18 +89,18 @@ public class CipherFacade {
     }
 
     private Keyring loadKeyring() throws IOException {
-        if (keyringFile.canRead()) {
-            return KeyringSaver.load(keyringFile, passphrase);
-        } else {
+        if (isNewFile()) {
             return new Keyring();
+        } else {
+            return KeyringSaver.load(keyringFile, passphrase);
         }
     }
 
-    private Cipher getCipher(SecretKeySpec key, int opmode)
+    private Cipher getCipher(SecretKeySpec key, int opmode, String algorithm)
             throws InvalidKeyException {
         Cipher cipher;
         try {
-            cipher = Cipher.getInstance("AES", "BC");
+            cipher = Cipher.getInstance(algorithm, "BC");
         } catch (GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
@@ -113,18 +112,19 @@ public class CipherFacade {
 
     public void decryptFile(File source, File dest) throws IOException,
             ClassNotFoundException {
-        Serializable[] data = null;
+        EncryptedObject data = null;
         try {
             data = ObjectCipherSaver.load(source);
         } catch (GeneralSecurityException e) {
             throw new RuntimeException(e);
         }
 
-        Serializable keyId = data[0];
-        SealedObject object = (SealedObject) data[1];
+        Serializable keyId = data.getKeyId();
+        SealedObject object = (SealedObject) data.getData();
 
         EquatableSecretKey skey = loadKeyring().get(keyId);
-        SecretKeySpec key = new SecretKeySpec(skey.getData(), "AES");
+        SecretKeySpec key = new SecretKeySpec(skey.getData(),
+                data.getAlgorithm());
 
         FileData fileData = null;
         try {
@@ -136,5 +136,9 @@ public class CipherFacade {
         FileOutputStream fos = new FileOutputStream(dest);
         fos.write(fileData.getData());
         fos.close();
+    }
+
+    public boolean isNewFile() {
+        return !keyringFile.exists();
     }
 }

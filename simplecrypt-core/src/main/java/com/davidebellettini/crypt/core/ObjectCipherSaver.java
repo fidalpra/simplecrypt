@@ -23,32 +23,25 @@ public class ObjectCipherSaver {
 		ObjectOutputStream os = null;
 		try {
 			os = new ObjectOutputStream(new FileOutputStream(file));
-
-			os.writeObject(keyId);
-			os.writeObject(sealed);
+			os.writeObject(new EncryptedObject(keyId, cipher.getAlgorithm(), sealed));
 		} finally {
 			if (os != null)
 				os.close();
 		}
 	}
 
-	public static Serializable[] load(File file) throws IOException,
+	public static EncryptedObject load(File file) throws IOException,
 			ClassNotFoundException, IllegalBlockSizeException,
 			BadPaddingException {
 
 		ObjectInputStream is = null;
-		Serializable[] data = new Serializable[2];
 
 		try {
 			is = new ObjectInputStream(new FileInputStream(file));
-			data[0] = (Serializable) is.readObject();
-			data[1] = (Serializable) is.readObject();
-
-			return data;
+			return (EncryptedObject)is.readObject();
 		} finally {
 			if (is != null)
 				is.close();
 		}
 	}
-
 }

@@ -2,14 +2,23 @@ package com.davidebellettini.crypt.gui;
 
 import java.awt.Component;
 import java.io.File;
+import java.io.IOException;
+import java.util.Arrays;
 
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 
 import org.jdesktop.application.Action;
+
+import com.davidebellettini.crypt.core.CipherFacade;
+import com.davidebellettini.crypt.core.Keyring;
+import com.davidebellettini.crypt.gui.conf.ConfigurationFactory;
 
 public class MainController {
     private final SimpleCryptApp application;
     private MainView mainView;
+    private Keyring keyring;
+    private CipherFacade facade;
 
     public MainController(SimpleCryptApp application) {
         this.application = application;
@@ -27,13 +36,36 @@ public class MainController {
     }
 
     @Action
-    public void encrypt() {
+    public void encrypt() throws IOException {
         File[] files = selectSourceAndDest(mainView.getFrame());
+
+        boolean ok = false;
+
+        while (!ok) {
+            try {
+                getCipherFacade().encryptFile(files[0], files[1], "AES");
+                ok = true;
+            } catch (RuntimeException e) {
+                this.facade = null;
+            }
+        }
     }
 
     @Action
-    public void decrypt() {
+    public void decrypt() throws IOException, ClassNotFoundException {
         File[] files = selectSourceAndDest(mainView.getFrame());
+
+        boolean ok = false;
+
+        while (!ok) {
+            try {
+                getCipherFacade().decryptFile(files[0], files[1]);
+                ok = true;
+            } catch (RuntimeException e) {
+                this.facade = null;
+            }
+        }
+
     }
 
     private File[] selectSourceAndDest(Component component) {
@@ -55,5 +87,41 @@ public class MainController {
         }
 
         return files;
+    }
+
+    private CipherFacade getCipherFacade() {
+        while (this.facade == null) {
+            char[] passphrase;
+
+            this.facade = CipherFacade.factory(getKeyringFile(),
+                    passphrase = askForPassphrase());
+
+            if (this.facade.isNewFile()) {
+                if (!Arrays.equals(askForPassphrase(), passphrase)) {
+                    this.facade = null;
+                }
+            }
+        }
+
+        return this.facade;
+    }
+
+    private File getKeyringFile() {
+        File file;
+        file = new File(ConfigurationFactory.getConfiguration().get(
+                "keyringFile"));
+        return file;
+    }
+
+    private char[] askForPassphrase(boolean secondTime) {
+        String response = JOptionPane
+                .showInputDialog(getApplication().getMainFrame(), "Passphrase"
+                        + (secondTime ? " (ripeti)" : ""));
+
+        return response.toCharArray();
+    }
+
+    private char[] askForPassphrase() {
+        return askForPassphrase(false);
     }
 }

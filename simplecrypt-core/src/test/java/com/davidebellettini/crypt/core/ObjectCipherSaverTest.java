@@ -3,7 +3,6 @@ package com.davidebellettini.crypt.core;
 import static org.junit.Assert.assertEquals;
 
 import java.io.File;
-import java.io.Serializable;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
 import java.security.NoSuchProviderException;
@@ -29,15 +28,15 @@ public class ObjectCipherSaverTest {
 		String data = "Goofy";
 		File file = new File("target/object.test");
 		SecretKeySpec key = getRandomKey();
-		Cipher encCipher = getCipher(key, Cipher.ENCRYPT_MODE);
+		Cipher encCipher = getCipher(key, Cipher.ENCRYPT_MODE,"AES");
 
 		ObjectCipherSaver.save(data, file, "DonaldDuck", encCipher);
 		
-		Cipher decCipher = getCipher(key, Cipher.DECRYPT_MODE);
+		Cipher decCipher = getCipher(key, Cipher.DECRYPT_MODE, "AES");
 		
-		Serializable[] loadedData = ObjectCipherSaver.load(file);
-		assertEquals("DonaldDuck", loadedData[0]);
-		assertEquals(data, ((SealedObject)loadedData[1]).getObject(decCipher));
+		EncryptedObject loadedData = ObjectCipherSaver.load(file);
+		assertEquals("DonaldDuck", loadedData.getKeyId());
+		assertEquals(data, ((SealedObject)loadedData.getData()).getObject(decCipher));
 	}
 
 	private SecretKeySpec getRandomKey() throws NoSuchAlgorithmException {
@@ -48,10 +47,10 @@ public class ObjectCipherSaverTest {
 		return new SecretKeySpec(key, "AES");
 	}
 
-	private Cipher getCipher(SecretKeySpec key, int opmode)
+	private Cipher getCipher(SecretKeySpec key, int opmode, String algorithm)
 			throws NoSuchAlgorithmException, NoSuchProviderException,
 			NoSuchPaddingException, InvalidKeyException {
-		Cipher cipher = Cipher.getInstance("AES", "BC");
+		Cipher cipher = Cipher.getInstance(algorithm, "BC");
 
 		cipher.init(opmode, key);
 
