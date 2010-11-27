@@ -36,7 +36,7 @@ public class KeyringSaverTest {
 
 		KeyringSaver.save(keyring, keyringFile, passphrase, salt);
 
-		Keyring loaded = KeyringSaver.load(keyringFile, passphrase, salt);
+		Keyring loaded = KeyringSaver.load(keyringFile, passphrase);
 
 		assertEquals(keyring, loaded);
 	}

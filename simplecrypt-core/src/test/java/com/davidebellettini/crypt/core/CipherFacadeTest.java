@@ -5,7 +5,6 @@ import static org.junit.Assert.assertArrayEquals;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.security.SecureRandom;
 
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,14 +17,11 @@ public class CipherFacadeTest {
 
 	@Test
 	public void test1() throws IOException, ClassNotFoundException {
-		byte[] salt = new byte[8];
-		new SecureRandom().nextBytes(salt);
-
 		File keyringFile = new File("target/keyring.test");
 		keyringFile.delete();
 
 		CipherFacade facade = CipherFacade.factory(keyringFile,
-				"99BottlesOfBeer".toCharArray(), salt);
+				"99BottlesOfBeer".toCharArray());
 
 		File encryptedFile = new File("target/example.sc");
 		File originalFile = new File("example.txt");

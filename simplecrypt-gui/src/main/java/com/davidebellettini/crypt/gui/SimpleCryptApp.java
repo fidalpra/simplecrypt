@@ -6,6 +6,8 @@ import javax.swing.JOptionPane;
 
 import org.jdesktop.application.SingleFrameApplication;
 
+import com.davidebellettini.crypt.core.ProviderInitializer;
+
 public class SimpleCryptApp extends SingleFrameApplication {
 
     /**
@@ -36,6 +38,8 @@ public class SimpleCryptApp extends SingleFrameApplication {
 
     @Override
     protected void startup() {
+        ProviderInitializer.loadProvider();
+        
         new MainController(this);
     }
 }

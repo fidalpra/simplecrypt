@@ -3,9 +3,7 @@ package com.davidebellettini.crypt.gui;
 import java.awt.Component;
 import java.io.File;
 
-import javax.swing.JComponent;
 import javax.swing.JFileChooser;
-import javax.swing.JFrame;
 
 import org.jdesktop.application.Action;
 
@@ -31,14 +29,11 @@ public class MainController {
     @Action
     public void encrypt() {
         File[] files = selectSourceAndDest(mainView.getFrame());
-        
-        com.davidebellettini.crypt.core.CipherFacade x;
     }
 
     @Action
     public void decrypt() {
         File[] files = selectSourceAndDest(mainView.getFrame());
-
     }
 
     private File[] selectSourceAndDest(Component component) {

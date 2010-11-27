@@ -17,107 +17,124 @@ import javax.crypto.spec.SecretKeySpec;
 
 public class CipherFacade {
 
-	private final File keyringFile;
-	private final char[] passphrase;
-	private final byte[] salt;
+    private final File keyringFile;
+    private final char[] passphrase;
 
-	public CipherFacade(File keyringFile, char[] passPhrase, byte[] salt) {
-		this.keyringFile = keyringFile;
-		this.passphrase = passPhrase;
-		this.salt = salt;
-	}
+    public CipherFacade(File keyringFile, char[] passPhrase) {
+        this.keyringFile = keyringFile;
+        this.passphrase = passPhrase;
+    }
 
-	public static CipherFacade factory(File keyringFile, char[] passPhrase,
-			byte[] salt) {
+    public static CipherFacade factory(File keyringFile, char[] passPhrase) {
 
-		return new CipherFacade(keyringFile, passPhrase, salt);
-	}
+        return new CipherFacade(keyringFile, passPhrase);
+    }
 
-	public void encryptFile(File source, File dest, String algorithm)
-			throws IOException {
-		FileData fileData = FileLoader.load(source);
+    public void encryptFile(File source, File dest, String algorithm)
+            throws IOException {
+        FileData fileData = FileLoader.load(source);
 
-		Keyring keyring = loadKeyring();
+        Keyring keyring = loadKeyring();
 
-		SecureRandom random = null;
+        SecureRandom random = null;
 
-		try {
-			random = SecureRandom.getInstance("SHA1PRNG");
-		} catch (NoSuchAlgorithmException e) {
-			throw new RuntimeException(e);
-		}
+        try {
+            random = SecureRandom.getInstance("SHA1PRNG");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
 
-		byte[] rawKey = new byte[256 / 8];
-		random.nextBytes(rawKey);
+        byte[] rawKey = new byte[256 / 8];
+        random.nextBytes(rawKey);
 
-		SecretKeySpec key = new SecretKeySpec(rawKey, "AES");
+        SecretKeySpec key = new SecretKeySpec(rawKey, "AES");
 
-		Cipher cipher = null;
+        Cipher cipher = null;
 
-		try {
-			cipher = getCipher(key, Cipher.ENCRYPT_MODE);
-		} catch (InvalidKeyException e) {
-			throw new RuntimeException(e);
-		}
+        try {
+            cipher = getCipher(key, Cipher.ENCRYPT_MODE);
+        } catch (InvalidKeyException e) {
+            throw new RuntimeException(e);
+        }
 
-		UUID keyId = UUID.randomUUID();
-		keyring.put(keyId, new EquatableSecretKey(rawKey));
+        UUID keyId = UUID.randomUUID();
+        keyring.put(keyId, new EquatableSecretKey(rawKey));
 
-		try {
-			ObjectCipherSaver.save(fileData, dest, keyId, cipher);
-		} catch (IllegalBlockSizeException e) {
-			throw new RuntimeException(e);
-		}
+        try {
+            ObjectCipherSaver.save(fileData, dest, keyId, cipher);
+        } catch (IllegalBlockSizeException e) {
+            throw new RuntimeException(e);
+        }
 
-		KeyringSaver.save(keyring, keyringFile, passphrase, salt);
-	}
+        KeyringSaver.save(keyring, keyringFile, passphrase, generateSalt());
+    }
 
-	private Keyring loadKeyring() throws IOException {
-		if (keyringFile.canRead()) {
-			return KeyringSaver.load(keyringFile, passphrase, salt);
-		} else {
-			return new Keyring();
-		}
-	}
+    private byte[] generateSalt() {
+        return getSecureRandomBytes(8);
+    }
 
-	private Cipher getCipher(SecretKeySpec key, int opmode)
-			throws InvalidKeyException {
-		Cipher cipher;
-		try {
-			cipher = Cipher.getInstance("AES", "BC");
-		} catch (GeneralSecurityException e) {
-			throw new RuntimeException(e);
-		}
+    private byte[] getSecureRandomBytes(int length) {
+        byte[] bytes = new byte[length];
 
-		cipher.init(opmode, key);
+        SecureRandom random = null;
 
-		return cipher;
-	}
+        try {
+            random = SecureRandom.getInstance("SHA1PRNG");
+        } catch (NoSuchAlgorithmException e) {
+            throw new RuntimeException(e);
+        }
 
-	public void decryptFile(File source, File dest) throws IOException,
-			ClassNotFoundException {
-		Serializable[] data = null;
-		try {
-			data = ObjectCipherSaver.load(source);
-		} catch (GeneralSecurityException e) {
-			throw new RuntimeException(e);
-		}
+        random.nextBytes(bytes);
 
-		Serializable keyId = data[0];
-		SealedObject object = (SealedObject) data[1];
+        return bytes;
+    }
 
-		EquatableSecretKey skey = loadKeyring().get(keyId);
-		SecretKeySpec key = new SecretKeySpec(skey.getData(), "AES");
+    private Keyring loadKeyring() throws IOException {
+        if (keyringFile.canRead()) {
+            return KeyringSaver.load(keyringFile, passphrase);
+        } else {
+            return new Keyring();
+        }
+    }
 
-		FileData fileData = null;
-		try {
-			fileData = (FileData) object.getObject(key);
-		} catch (GeneralSecurityException e) {
-			throw new RuntimeException(e);
-		}
-		
-		FileOutputStream fos = new FileOutputStream(dest);
-		fos.write(fileData.getData());
-		fos.close();
-	}
+    private Cipher getCipher(SecretKeySpec key, int opmode)
+            throws InvalidKeyException {
+        Cipher cipher;
+        try {
+            cipher = Cipher.getInstance("AES", "BC");
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        }
+
+        cipher.init(opmode, key);
+
+        return cipher;
+    }
+
+    public void decryptFile(File source, File dest) throws IOException,
+            ClassNotFoundException {
+        Serializable[] data = null;
+        try {
+            data = ObjectCipherSaver.load(source);
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        }
+
+        Serializable keyId = data[0];
+        SealedObject object = (SealedObject) data[1];
+
+        EquatableSecretKey skey = loadKeyring().get(keyId);
+        SecretKeySpec key = new SecretKeySpec(skey.getData(), "AES");
+
+        FileData fileData = null;
+        try {
+            fileData = (FileData) object.getObject(key);
+        } catch (GeneralSecurityException e) {
+            throw new RuntimeException(e);
+        }
+
+        FileOutputStream fos = new FileOutputStream(dest);
+        fos.write(fileData.getData());
+        fos.close();
+    }
 }
