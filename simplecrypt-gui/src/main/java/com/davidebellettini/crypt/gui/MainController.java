@@ -79,6 +79,7 @@ public class MainController {
         if (option == JFileChooser.APPROVE_OPTION) {
             files[0] = chooser.getSelectedFile();
 
+            chooser = new JFileChooser();
             option = chooser.showSaveDialog(component);
 
             if (option == JFileChooser.APPROVE_OPTION) {
