@@ -19,57 +19,57 @@ import org.jdesktop.application.FrameView;
  */
 public class MainView extends FrameView {
 
-	private JMenuBar menuBar;
-	private MainPanel panel;
-	private JMenuItem fileMenu;
-	private JMenuItem fileExitMenuItem;
-	private ApplicationActionMap actionMap;
-	private JMenuItem fileCryptMenuItem;
-	private JMenuItem fileDecryptMenuItem;
+    private JMenuBar menuBar;
+    private MainPanel panel;
+    private JMenuItem fileMenu;
+    private JMenuItem fileExitMenuItem;
+    private ApplicationActionMap actionMap;
+    private JMenuItem fileCryptMenuItem;
+    private JMenuItem fileDecryptMenuItem;
 
-	public MainView(SimpleCryptApp application, ApplicationActionMap actionMap) {
-		super(application);
+    public MainView(SimpleCryptApp application, ApplicationActionMap actionMap) {
+        super(application);
 
-		this.actionMap = actionMap;
+        this.actionMap = actionMap;
 
-		initComponents();
-	}
+        initComponents();
+    }
 
-	private void initComponents() {
-		this.panel = new MainPanel();
+    private void initComponents() {
+        this.panel = new MainPanel();
 
-		getFrame().setContentPane(this.panel);
+        getFrame().setContentPane(this.panel);
 
-		initMenuBar();
-	}
+        initMenuBar();
+    }
 
-	private void initMenuBar() {
-		menuBar = new JMenuBar();
+    private void initMenuBar() {
+        menuBar = new JMenuBar();
 
-		fileMenu = new JMenu("File");
-		
-		fileCryptMenuItem = new JMenuItem();
-		fileCryptMenuItem.setAction(actionMap.get("crypt"));
-		fileCryptMenuItem.setText("Cifra...");
-		
-		fileMenu.add(fileCryptMenuItem);
-		
-		fileDecryptMenuItem = new JMenuItem();
-		fileDecryptMenuItem.setAction(actionMap.get("decrypt"));
-		fileDecryptMenuItem.setText("Decifra...");
-		
-		fileMenu.add(fileDecryptMenuItem);
-		
-		fileMenu.add(new JSeparator());
+        fileMenu = new JMenu("File");
 
-		fileExitMenuItem = new JMenuItem();
-		fileExitMenuItem.setAction(actionMap.get("exit"));
-		fileExitMenuItem.setText("Esci");
+        fileCryptMenuItem = new JMenuItem();
+        fileCryptMenuItem.setAction(actionMap.get("encrypt"));
+        fileCryptMenuItem.setText("Cifra...");
 
-		fileMenu.add(fileExitMenuItem);
+        fileMenu.add(fileCryptMenuItem);
 
-		this.menuBar.add(this.fileMenu);
+        fileDecryptMenuItem = new JMenuItem();
+        fileDecryptMenuItem.setAction(actionMap.get("decrypt"));
+        fileDecryptMenuItem.setText("Decifra...");
 
-		setMenuBar(this.menuBar);
-	}
+        fileMenu.add(fileDecryptMenuItem);
+
+        fileMenu.add(new JSeparator());
+
+        fileExitMenuItem = new JMenuItem();
+        fileExitMenuItem.setAction(actionMap.get("exit"));
+        fileExitMenuItem.setText("Esci");
+
+        fileMenu.add(fileExitMenuItem);
+
+        this.menuBar.add(this.fileMenu);
+
+        setMenuBar(this.menuBar);
+    }
 }
