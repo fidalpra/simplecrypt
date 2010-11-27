@@ -22,6 +22,8 @@ public class MainController {
         this.application = application;
         application.show(this.mainView = new MainView(application, application
                 .getContext().getActionMap(this)));
+        
+        //getCipherFacade();
     }
 
     public SimpleCryptApp getApplication() {
