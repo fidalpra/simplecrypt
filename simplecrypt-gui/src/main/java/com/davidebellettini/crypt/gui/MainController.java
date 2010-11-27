@@ -11,13 +11,11 @@ import javax.swing.JOptionPane;
 import org.jdesktop.application.Action;
 
 import com.davidebellettini.crypt.core.CipherFacade;
-import com.davidebellettini.crypt.core.Keyring;
 import com.davidebellettini.crypt.gui.conf.ConfigurationFactory;
 
 public class MainController {
     private final SimpleCryptApp application;
     private MainView mainView;
-    private Keyring keyring;
     private CipherFacade facade;
 
     public MainController(SimpleCryptApp application) {
@@ -61,11 +59,14 @@ public class MainController {
             try {
                 getCipherFacade().decryptFile(files[0], files[1]);
                 ok = true;
+            } catch (NullPointerException e) {
+                JOptionPane.showMessageDialog(getApplication().getMainFrame(),
+                        "Chiave non presente nel portachiavi!");
+                ok = true;
             } catch (RuntimeException e) {
                 this.facade = null;
             }
         }
-
     }
 
     private File[] selectSourceAndDest(Component component) {
@@ -97,7 +98,7 @@ public class MainController {
                     passphrase = askForPassphrase());
 
             if (this.facade.isNewFile()) {
-                if (!Arrays.equals(askForPassphrase(), passphrase)) {
+                if (!Arrays.equals(askForPassphrase(true), passphrase)) {
                     this.facade = null;
                 }
             }
@@ -117,6 +118,9 @@ public class MainController {
         String response = JOptionPane
                 .showInputDialog(getApplication().getMainFrame(), "Passphrase"
                         + (secondTime ? " (ripeti)" : ""));
+
+        if (response == null)
+            getApplication().exit();
 
         return response.toCharArray();
     }
